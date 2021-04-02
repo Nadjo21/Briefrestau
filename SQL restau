@@ -1,0 +1,63 @@
+create table if not exists serveurs
+(
+	id serial not null
+		constraint serveurs_pk
+			primary key,
+	nom varchar,
+	prenom varchar
+);
+
+alter table serveurs owner to postgres;
+
+create table if not exists tables
+(
+	id serial not null
+		constraint tables_pk
+			primary key,
+	nbre_de_convives integer
+);
+
+alter table tables owner to postgres;
+
+create table if not exists facture
+(
+	id serial not null
+		constraint facture_pk
+			primary key,
+	table_idx integer
+		constraint table_fk
+			references tables,
+	serveurs_idx integer
+		constraint serveurs_fk
+			references serveurs
+);
+
+alter table facture owner to postgres;
+
+create table if not exists plat
+(
+	id serial not null
+		constraint plat_pk
+			primary key,
+	"Nom_du_plat" varchar,
+	prix_unitaire double precision
+);
+
+alter table plat owner to postgres;
+
+create table if not exists table_intermediaire
+(
+	plat_idx integer
+		constraint plat_fk
+			references plat,
+	facture_idx integer
+		constraint facture_fk
+			references facture,
+	quantite integer,
+	id serial not null
+		constraint table_intermediaire_pk
+			primary key
+);
+
+alter table table_intermediaire owner to postgres;
+
